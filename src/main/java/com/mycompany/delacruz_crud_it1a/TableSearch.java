@@ -75,13 +75,10 @@ public class TableSearch extends javax.swing.JFrame {
 
         tblData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "FULLNAME", "USERNAME"
             }
         ));
         jScrollPane1.setViewportView(tblData);
@@ -137,7 +134,7 @@ public class TableSearch extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
@@ -149,41 +146,39 @@ public class TableSearch extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnFetchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFetchActionPerformed
-        
         //refresh table
         tblmodel.fireTableDataChanged();
-        
         //create new data table
         tblmodel = new DefaultTableModel();
         //and set column headers
         tblmodel.setColumnIdentifiers(tableHeader);
-        
         //set the tablemodel
         tblData.setModel(tblmodel);
-        
         //autofit content
         tblData.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        
         tblData.setFillsViewportHeight(true);
-        
         //get the saearch data 
         dataInfo = txtData.getText();
-        
-        
         try{
             //All OPtion
             if(cboOption.getSelectedItem().equals("ALL")){
                 stmt = con.prepareStatement("SELECT * FROM users;");
                 rs = stmt.executeQuery();
                 while(rs.next()){
-                    flag = 1; //record is present
-                }
+                    flag = 1; //record is present 
+                    //Assign the string value feom mysql table
+                    SID = rs.getString("id");
+                    SFname = rs.getString("fullname");
+                    SUname = rs.getString("uname");
+                    tblmodel.addRow(new Object[]{SID,SFname,SUname});
+                }//end of while
+                if(flag == 0){
+                    JOptionPane.showMessageDialog(null, "No Record","Error Message",JOptionPane.ERROR_MESSAGE);
+                }//end of if
             }
-            
         }catch(SQLException  | HeadlessException ex){
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }//end of catch
-        
     }//GEN-LAST:event_btnFetchActionPerformed
 
     /**
