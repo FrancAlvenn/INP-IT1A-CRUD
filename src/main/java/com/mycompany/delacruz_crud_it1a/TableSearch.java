@@ -16,7 +16,7 @@ public class TableSearch extends javax.swing.JFrame {
     Connection con;
     PreparedStatement stmt;
     ResultSet rs;
-    String dataInfo;
+    String dataInfo,SID,SFname,SUname;
     int flag;
     Statement statement;
     
@@ -150,8 +150,24 @@ public class TableSearch extends javax.swing.JFrame {
 
     private void btnFetchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFetchActionPerformed
         
+        //refresh table
+        tblmodel.fireTableDataChanged();
         
+        //create new data table
+        tblmodel = new DefaultTableModel();
+        //and set column headers
+        tblmodel.setColumnIdentifiers(tableHeader);
         
+        //set the tablemodel
+        tblData.setModel(tblmodel);
+        
+        //autofit content
+        tblData.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        
+        tblData.setFillsViewportHeight(true);
+        
+        //get the saearch data 
+        dataInfo = txtData.getText();
         
         
     }//GEN-LAST:event_btnFetchActionPerformed
