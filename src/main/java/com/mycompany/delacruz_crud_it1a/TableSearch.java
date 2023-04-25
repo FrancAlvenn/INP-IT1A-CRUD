@@ -57,7 +57,7 @@ public class TableSearch extends javax.swing.JFrame {
         setTitle("Fetch Data");
         setResizable(false);
 
-        cboOption.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "FULLNAME", "USERNAME" }));
+        cboOption.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ALL", "ID", "FULLNAME", "USERNAME" }));
 
         btnReset.setText("Reset");
         btnReset.addActionListener(new java.awt.event.ActionListener() {
@@ -169,6 +169,20 @@ public class TableSearch extends javax.swing.JFrame {
         //get the saearch data 
         dataInfo = txtData.getText();
         
+        
+        try{
+            //All OPtion
+            if(cboOption.getSelectedItem().equals("ALL")){
+                stmt = con.prepareStatement("SELECT * FROM users;");
+                rs = stmt.executeQuery();
+                while(rs.next()){
+                    flag = 1; //record is present
+                }
+            }
+            
+        }catch(SQLException  | HeadlessException ex){
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }//end of catch
         
     }//GEN-LAST:event_btnFetchActionPerformed
 
