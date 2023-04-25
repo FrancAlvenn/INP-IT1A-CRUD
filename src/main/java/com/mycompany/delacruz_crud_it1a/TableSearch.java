@@ -67,6 +67,11 @@ public class TableSearch extends javax.swing.JFrame {
         });
 
         btnFetch.setText("Fetch Data");
+        btnFetch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFetchActionPerformed(evt);
+            }
+        });
 
         tblData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -142,6 +147,14 @@ public class TableSearch extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btnResetActionPerformed
+
+    private void btnFetchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFetchActionPerformed
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_btnFetchActionPerformed
 
     /**
      * @param args the command line arguments
