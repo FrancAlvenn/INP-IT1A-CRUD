@@ -29,7 +29,7 @@ public class TableSearch extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setDriver(); // method to set mysql driver
     }
-
+    
     public void setDriver(){
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -174,11 +174,59 @@ public class TableSearch extends javax.swing.JFrame {
                 }//end of while
                 if(flag == 0){
                     JOptionPane.showMessageDialog(null, "No Record","Error Message",JOptionPane.ERROR_MESSAGE);
-                }//end of if
-            }
+                }
+            }//end of if
+            else if(cboOption.getSelectedItem().equals("ID")){
+                stmt = con.prepareStatement("SELECT * FROM users WHERE id = " + dataInfo);
+                rs = stmt.executeQuery();
+                while(rs.next()){
+                    flag = 1; //record is present 
+                    //Assign the string value feom mysql table
+                    SID = rs.getString("id");
+                    SFname = rs.getString("fullname");
+                    SUname = rs.getString("uname");
+                    tblmodel.addRow(new Object[]{SID,SFname,SUname});
+                }//end of while
+                if(flag == 0){
+                    JOptionPane.showMessageDialog(null, "No Record","Error Message",JOptionPane.ERROR_MESSAGE);
+                }
+                }//end of else if
+            else if(cboOption.getSelectedItem().equals("FULLNAME")){
+                stmt = con.prepareStatement("SELECT * FROM users WHERE fullname like '%" + dataInfo +"%'");
+                rs = stmt.executeQuery();
+                while(rs.next()){
+                    flag = 1; //record is present 
+                    //Assign the string value feom mysql table
+                    SID = rs.getString("id");
+                    SFname = rs.getString("fullname");
+                    SUname = rs.getString("uname");
+                    tblmodel.addRow(new Object[]{SID,SFname,SUname});
+                }//end of while
+                if(flag == 0){
+                    JOptionPane.showMessageDialog(null, "No Record","Error Message",JOptionPane.ERROR_MESSAGE);
+                }
+                }//end of else if
+            else if(cboOption.getSelectedItem().equals("USERNAME")){
+                stmt = con.prepareStatement("SELECT * FROM users WHERE uname = '" + dataInfo +"'");
+                rs = stmt.executeQuery();
+                while(rs.next()){
+                    flag = 1; //record is present 
+                    //Assign the string value feom mysql table
+                    SID = rs.getString("id");
+                    SFname = rs.getString("fullname");
+                    SUname = rs.getString("uname");
+                    tblmodel.addRow(new Object[]{SID,SFname,SUname});
+                }//end of while
+                if(flag == 0){
+                    JOptionPane.showMessageDialog(null, "No Record","Error Message",JOptionPane.ERROR_MESSAGE);
+                }
+                }//end of else if
+                
+            
         }catch(SQLException  | HeadlessException ex){
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }//end of catch
+        
     }//GEN-LAST:event_btnFetchActionPerformed
 
     /**
