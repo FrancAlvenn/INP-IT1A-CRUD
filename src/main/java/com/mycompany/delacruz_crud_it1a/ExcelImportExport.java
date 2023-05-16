@@ -8,6 +8,8 @@ import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.util.*;
+import jxl.write.*;
+import jxl.read.biff.BiffException;
 
 
 public class ExcelImportExport extends javax.swing.JFrame {
@@ -35,6 +37,39 @@ public class ExcelImportExport extends javax.swing.JFrame {
         
     }
 
+    
+    void fillData(File file)throws WriteException{
+        Workbook workbook = null;
+        try{
+            try{
+                workbook = Workbook.getWorkbook(file);
+            }catch(IOException | BiffException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+            
+            Sheet sheet = workbook.getSheet(0); //sheet 1
+            headers.clear();
+            for(int i = 0;i<sheet.getColumns();i++){
+                Cell cell1 = sheet.getCell(i,0);
+                headers.add(cell1.getContents()); 
+            }//end for loop
+            data.clear();
+            
+            for (int j = 0; j<sheet.getRows();j++){
+                Vector d = new Vector ();
+                for(int i = 0;i<sheet.getColumns();i++){
+                Cell cell = sheet.getCell(i,0);
+                d.add(cell.getContents());
+            }//end inner for loop
+                d.add("\n");
+                data.add(d);
+            }//end outer for loop
+            
+        }catch(HeadlessException e){
+                JOptionPane.showMessageDialog(null, e);
+    }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
