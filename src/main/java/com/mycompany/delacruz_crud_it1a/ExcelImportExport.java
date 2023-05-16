@@ -3,6 +3,7 @@ package com.mycompany.delacruz_crud_it1a;
 
 import jxl.*;
 import java.awt.*;
+import java.io.*;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -22,6 +23,16 @@ public class ExcelImportExport extends javax.swing.JFrame {
     
     public ExcelImportExport(){
         initComponents();
+        jChooser = new JFileChooser();
+        model = new DefaultTableModel(data,headers);
+        tbldata.setAutoCreateRowSorter(true);
+        tbldata.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tbldata.setRowHeight(25);
+        tbldata.setRowMargin(4);
+        tblWidth = model.getColumnCount()*150;
+        tblHeight = model.getRowCount()*25;
+        tbldata.setPreferredSize(new Dimension(tblWidth,tblHeight));
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -39,6 +50,11 @@ public class ExcelImportExport extends javax.swing.JFrame {
         setResizable(false);
 
         btnimport.setText("Import Excel File");
+        btnimport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnimportActionPerformed(evt);
+            }
+        });
 
         btnexport.setText("Export to Excel File");
         btnexport.addActionListener(new java.awt.event.ActionListener() {
@@ -100,6 +116,17 @@ public class ExcelImportExport extends javax.swing.JFrame {
     private void btnexportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexportActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnexportActionPerformed
+
+    private void btnimportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimportActionPerformed
+       jChooser.showOpenDialog(null);
+       File file = jChooser.getSelectedFile();
+       if(!file.getName().endsWith("xls")){
+           JOptionPane.showMessageDialog(null, "Select .xls file only!", "File Extension Error",JOptionPane.ERROR_MESSAGE);
+       }//end if
+       else{
+           
+       }
+    }//GEN-LAST:event_btnimportActionPerformed
 
 
     public static void main(String args[]) {
