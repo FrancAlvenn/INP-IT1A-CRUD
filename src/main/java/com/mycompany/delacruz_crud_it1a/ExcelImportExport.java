@@ -58,7 +58,7 @@ public class ExcelImportExport extends javax.swing.JFrame {
             for (int j = 0; j<sheet.getRows();j++){
                 Vector d = new Vector ();
                 for(int i = 0;i<sheet.getColumns();i++){
-                Cell cell = sheet.getCell(i,0);
+                Cell cell = sheet.getCell(0,i);
                 d.add(cell.getContents());
             }//end inner for loop
                 d.add("\n");
@@ -159,6 +159,17 @@ public class ExcelImportExport extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(null, "Select .xls file only!", "File Extension Error",JOptionPane.ERROR_MESSAGE);
        }//end if
        else{
+           try{
+               fillData(file);
+               model = new DefaultTableModel(data,headers);
+               tblWidth = model.getColumnCount()*150;
+               tblHeight = model.getRowCount()*25;
+               tbldata.setPreferredSize(new Dimension(tblWidth,tblHeight));
+               tbldata.setModel(model);
+               
+           }catch(WriteException e){
+               JOptionPane.showMessageDialog(null, e);
+           }
            
        }
     }//GEN-LAST:event_btnimportActionPerformed
