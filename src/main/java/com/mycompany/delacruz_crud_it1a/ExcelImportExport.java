@@ -58,7 +58,7 @@ public class ExcelImportExport extends javax.swing.JFrame {
             for (int j = 0; j<sheet.getRows();j++){
                 Vector d = new Vector ();
                 for(int i = 0;i<sheet.getColumns();i++){
-                Cell cell = sheet.getCell(0,i);
+                Cell cell = sheet.getCell(i,j);
                 d.add(cell.getContents());
             }//end inner for loop
                 d.add("\n");
