@@ -1,8 +1,9 @@
 
 package com.mycompany.delacruz_crud_it1a;
 
+import java.awt.Dimension;
+import java.awt.HeadlessException;
 import jxl.*;
-import java.awt.*;
 import java.io.*;
 import java.sql.*;
 import javax.swing.*;
@@ -70,13 +71,51 @@ public class ExcelImportExport extends javax.swing.JFrame {
     }
     }
     
+    void fillData1(JTable table, File file) throws WriteException {
+        try {
+            WritableWorkbook workbook1 = Workbook.createWorkbook(file); 
+            WritableSheet sheet1 = workbook1.createSheet("First Sheet", 0); 
+            TableModel model = table.getModel();
+            for (int i = 0; i < model.getColumnCount(); i++) {
+                 Label column = new Label(i, 0, model.getColumnName(i));
+                 sheet1.addCell(column);
+            }
+        int j = 0;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            for (j = 0; j < model.getColumnCount(); j++) {
+                Label row = new Label(j, i + 1,model.getValueAt(i, j).toString()); 
+                sheet1.addCell(row);
+            }
+        }
+        workbook1.write();
+        workbook1.close();
+        }catch(IOException | WriteException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public Connection getConnection(){
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        }catch(ClassNotFoundException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        Connection con = null;
+        try{
+            con = DriverManager.getConnection("jdbc:mysql://localhost/inpit1a","root","");
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        return con;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         btnimport = new javax.swing.JButton();
         btnexport = new javax.swing.JButton();
-        btnsave = new javax.swing.JButton();
+        btninsert = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbldata = new javax.swing.JTable();
 
@@ -98,7 +137,12 @@ public class ExcelImportExport extends javax.swing.JFrame {
             }
         });
 
-        btnsave.setText("Save Record");
+        btninsert.setText("Insert Data");
+        btninsert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btninsertActionPerformed(evt);
+            }
+        });
 
         tbldata.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,7 +168,7 @@ public class ExcelImportExport extends javax.swing.JFrame {
                 .addGap(79, 79, 79)
                 .addComponent(btnexport)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnsave)
+                .addComponent(btninsert)
                 .addGap(51, 51, 51))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(22, Short.MAX_VALUE)
@@ -138,7 +182,7 @@ public class ExcelImportExport extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnimport)
                     .addComponent(btnexport)
-                    .addComponent(btnsave))
+                    .addComponent(btninsert))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(36, Short.MAX_VALUE))
@@ -149,7 +193,12 @@ public class ExcelImportExport extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnexportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexportActionPerformed
-        // TODO add your handling code here:
+       try{
+           fillData1(tbldata, new File("C:\\Users\\Administrator\\Desktop\\usersinformation.xls"));
+           JOptionPane.showMessageDialog(null, "Data Exported Succesfully");
+       }catch(HeadlessException | WriteException e){
+           JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+       }
     }//GEN-LAST:event_btnexportActionPerformed
 
     private void btnimportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimportActionPerformed
@@ -173,6 +222,31 @@ public class ExcelImportExport extends javax.swing.JFrame {
            
        }
     }//GEN-LAST:event_btnimportActionPerformed
+
+    private void btninsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btninsertActionPerformed
+        Connection conn = getConnection();
+        Statement stmt;
+        int id;
+        String fullname,uname,pwd;
+        try{
+            stmt = conn.createStatement();
+            for(int i=1; i <model.getRowCount();i++){
+                fullname = model.getValueAt(i, 0).toString();
+                uname = model.getValueAt(i,1).toString();
+                pwd = model.getValueAt(i, 2).toString();
+                
+                String SQLQuery = "INSERT INTO users VALUES ('" + fullname +"','"+uname+"','"+pwd+"')";
+                stmt.addBatch(SQLQuery);
+            }
+            int[] rowsInserted = stmt.executeBatch();
+            JOptionPane.showMessageDialog(null, "Data Inserted");
+            JOptionPane.showMessageDialog(null, "Number of Rows Inserted: " + rowsInserted.length);
+            tbldata.setModel(new DefaultTableModel());
+  
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btninsertActionPerformed
 
 
     public static void main(String args[]) {
@@ -210,7 +284,7 @@ public class ExcelImportExport extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnexport;
     private javax.swing.JButton btnimport;
-    private javax.swing.JButton btnsave;
+    private javax.swing.JButton btninsert;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbldata;
     // End of variables declaration//GEN-END:variables

@@ -181,7 +181,7 @@ public class Insert_Form extends javax.swing.JFrame {
             statement = con.createStatement();
             statement.executeUpdate("INSERT INTO users (fullname, uname, pwd) VALUES('" + txtfname.getText() + "','" + txtuname.getText() + "','" + txtpwd.getText() + "');");
             JOptionPane.showMessageDialog(null, "Record Added Successfully!");
-            con.close();
+            //con.close();
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
             
